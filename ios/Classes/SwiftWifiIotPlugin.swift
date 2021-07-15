@@ -235,17 +235,11 @@ public class SwiftWifiIotPlugin: NSObject, FlutterPlugin {
 
     private func getSSID() -> String? {
         var ssid: String?
-        if #available(iOS 14.0, *) {
-            NEHotspotNetwork.fetchCurrent(completionHandler: { currentNetwork in
-                ssid = currentNetwork?.ssid
-            })
-        } else {
-            if let interfaces = CNCopySupportedInterfaces() as NSArray? {
-                for interface in interfaces {
-                    if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
-                        ssid = interfaceInfo[kCNNetworkInfoKeySSID as String] as? String
-                        break
-                    }
+        if let interfaces = CNCopySupportedInterfaces() as NSArray? {
+            for interface in interfaces {
+                if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
+                    ssid = interfaceInfo[kCNNetworkInfoKeySSID as String] as? String
+                    break
                 }
             }
         }
